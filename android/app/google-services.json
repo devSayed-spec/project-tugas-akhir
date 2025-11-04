@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "15876375690",
+    "firebase_url": "https://smart-locker-project-63711-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "smart-locker-project-63711",
+    "storage_bucket": "smart-locker-project-63711.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15876375690:android:09da1ce9f4a5e273329973",
+        "android_client_info": {
+          "package_name": "com.example.project_lockeriot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgdkpblEyLpy544c4IOv8m7HLEHIbt_wM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15876375690:android:ff51441d3ff1a9ad329973",
+        "android_client_info": {
+          "package_name": "com.example.smart_locker_komisaris"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgdkpblEyLpy544c4IOv8m7HLEHIbt_wM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15876375690:android:c902a23645f97ca6329973",
+        "android_client_info": {
+          "package_name": "com.example.smart_locker_komisaris_new"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgdkpblEyLpy544c4IOv8m7HLEHIbt_wM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

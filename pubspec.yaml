@@ -1,6 +1,6 @@
 name: smart_locker_komisaris_new
-description: A Flutter IoT app for Smart Locker using Firebase and MQTT
-publish_to: 'none'
+description: A new Flutter project
+homepage: https://github.com/devsayed-spec/project-tugas-akhir
 
 version: 1.0.0+1
 

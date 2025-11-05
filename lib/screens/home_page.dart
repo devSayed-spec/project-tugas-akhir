@@ -368,6 +368,21 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Fungsi untuk menentukan jumlah kolom berdasarkan lebar layar
+  int _getCrossAxisCount(double width) {
+    if (width > 1200) return 4;  // Desktop besar
+    if (width > 800) return 3;   // Desktop kecil / Tablet landscape
+    if (width > 600) return 2;   // Tablet portrait
+    return 2;                    // Mobile
+  }
+
+  // Fungsi untuk menentukan lebar maksimal konten
+  double _getMaxWidth(double screenWidth) {
+    if (screenWidth > 1200) return 1200;  // Batasi lebar di desktop besar
+    if (screenWidth > 800) return 900;    // Batasi lebar di desktop kecil
+    return screenWidth;                   // Full width di mobile/tablet
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -424,148 +439,161 @@ class _HomePageState extends State<HomePage> {
             _checkActiveClassAndStatus(),
           ]);
         },
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    gradient: LinearGradient(
-                      colors: [
-                        _statusColor.withOpacity(0.1),
-                        _statusColor.withOpacity(0.05),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16),
-                    leading: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: _statusColor.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        Icons.lock,
-                        size: 32,
-                        color: _statusColor,
-                      ),
-                    ),
-                    title: const Text(
-                      'Status Loker',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 8),
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 500),
-                          child: Container(
-                            key: ValueKey(_lockerStatus),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 4,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final screenWidth = constraints.maxWidth;
+            final maxWidth = _getMaxWidth(screenWidth);
+            final crossAxisCount = _getCrossAxisCount(screenWidth);
+
+            return Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxWidth),
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            gradient: LinearGradient(
+                              colors: [
+                                _statusColor.withOpacity(0.1),
+                                _statusColor.withOpacity(0.05),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
-                            decoration: BoxDecoration(
-                              color: _statusColor,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              _lockerStatus,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
+                          ),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(16),
+                            leading: Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: _statusColor.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                Icons.lock,
+                                size: 32,
+                                color: _statusColor,
                               ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        if (_activeClass.isNotEmpty)
-                          Text(
-                            'Kelas Aktif: $_activeClass',
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
+                            title: const Text(
+                              'Status Loker',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 8),
+                                AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 500),
+                                  child: Container(
+                                    key: ValueKey(_lockerStatus),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: _statusColor,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      _lockerStatus,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                if (_activeClass.isNotEmpty)
+                                  Text(
+                                    'Kelas Aktif: $_activeClass',
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                Text(
+                                  'Fingerprint terdaftar: ${_usedFingerprintIds.length}',
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.refresh),
+                              onPressed: () async {
+                                await Future.wait([
+                                  _checkActiveClassAndStatus(),
+                                  _loadUsedFingerprintIds(),
+                                ]);
+                              },
                             ),
                           ),
-                        Text(
-                          'Fingerprint terdaftar: ${_usedFingerprintIds.length}',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 12,
-                          ),
                         ),
-                      ],
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.refresh),
-                      onPressed: () async {
-                        await Future.wait([
-                          _checkActiveClassAndStatus(),
-                          _loadUsedFingerprintIds(),
-                        ]);
-                      },
-                    ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      GridView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 16,
+                          childAspectRatio: 1.1,
+                        ),
+                        children: [
+                          CustomMenuCard(
+                            icon: Icons.group_add,
+                            label: "Tambah Kelas",
+                            onTap: _navigateToAddClass,
+                          ),
+                          CustomMenuCard(
+                            icon: Icons.schedule,
+                            label: "Jadwal",
+                            onTap: _navigateToSchedule,
+                          ),
+                          CustomMenuCard(
+                            icon: Icons.fingerprint,
+                            label: "Daftar Sidik Jari",
+                            onTap: _navigateToRegisterFingerprint,
+                          ),
+                          CustomMenuCard(
+                            icon: Icons.list_alt,
+                            label: "List Sidik Jari",
+                            onTap: _navigateToFingerList,
+                          ),
+                          CustomMenuCard(
+                            icon: Icons.receipt_long,
+                            label: "Log Aktivitas",
+                            onTap: _navigateToLogPage,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
-
-              const SizedBox(height: 24),
-
-              GridView(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 1.1,
-                ),
-                children: [
-                  CustomMenuCard(
-                    icon: Icons.group_add,
-                    label: "Tambah Kelas",
-                    onTap: _navigateToAddClass,
-                  ),
-                  CustomMenuCard(
-                    icon: Icons.schedule,
-                    label: "Jadwal",
-                    onTap: _navigateToSchedule,
-                  ),
-                  CustomMenuCard(
-                    icon: Icons.fingerprint,
-                    label: "Daftar Sidik Jari",
-                    onTap: _navigateToRegisterFingerprint,
-                  ),
-                  CustomMenuCard(
-                    icon: Icons.list_alt,
-                    label: "List Sidik Jari",
-                    onTap: _navigateToFingerList,
-                  ),
-                  CustomMenuCard(
-                    icon: Icons.receipt_long,
-                    label: "Log Aktivitas",
-                    onTap: _navigateToLogPage,
-                  ),
-                ],
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
